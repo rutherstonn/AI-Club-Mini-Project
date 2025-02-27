@@ -1,0 +1,156 @@
+### Abstract
+
+- object recognition in context of scene understanding
+- common objects in natural context
+- 2.5 million labelled instances in 328k images
+
+---
+
+### 1. Introduction
+
+- will solve 3 core research problems in scene understanding
+    - detecting non-iconic views (non-canonical perspectives)
+    - contextual reasoning between objects
+    - precise 2D localization of objects
+- identity of many objects can be resolved using **context.**
+- i.e. why images depicting scenes are important
+- for scene analysis, we need a fully segmented and category labelled dataset.
+
+The Microsoft Common Objects in COntext (MS
+COCO) dataset contains 91 common object categories
+with 82 of them having more than 5,000 labeled instances, Fig. 6. In total the dataset has 2,500,000 labeled
+instances in 328,000 images
+
+---
+
+### 2. Related Work
+
+There has been significant advances in computer vision datasets. This section just describes in detail some of those advances. Listed are some sub categories :
+
+- Image Classification
+- Object detection
+    - Detection of many objects is highly dependent on *contextual information*.
+    - Detection datasets should contain objects in their natural environments.
+    
+    *The use of bounding boxes also limits the accuracy
+    for which detection algorithms may be evaluated. We
+    propose the use of fully segmented instances to enable
+    more accurate detector evaluation.*
+    
+- Semantic (connected with the meaning of words and sentences) scene labeling :
+    - each pixel must belong to a category
+    - individual instanced need not be segmented
+
+---
+
+# 3. Image Collection
+
+## 3.1 Common Object Categories
+
+- selected categories must form a representative set of all categories, have relevance to the practical world, and occur in high frequency
+- thing and stuff categories → mainly thing categories are included, but stuff categories may provide contextual benefit, so future labelling of them may be helpful
+- categories are limited to entry-level; so that a good amount of images are collected and the samples don’t overlap in categories.
+
+*It is also possible that some object
+categories may be parts of other object categories. For instance, a face may be part of a person. We anticipate the
+inclusion of object-part categories (face, hands, wheels)
+would be beneficial for many real-world applications.*
+
+## 3.2 Non-iconic Image Collection
+
+- once categories were decided, we have three type of images
+    - iconic-object images : single large object in a canonical perspective centered in the image.
+    - iconic-scene images : shot from canonical viewpoints and lack people
+    
+    ☝🏽These kind of images can be easily found by web search. 
+    
+    But they lack contextual information.  
+    
+    - non-iconic images : have contextual information and taken from non-canonical viewpoints.
+        - from Flickr
+        - search for pairwise combinations of object categories
+    
+    **The result is a collection of 328,000 images with
+    rich contextual relationships between objects**
+    
+
+---
+
+# 4. Image Annotation
+
+*Due to our desire to label over 2.5 million object
+instances, the design of a cost efficient yet high quality
+annotation pipeline was critical.*
+
+In particular, we have increased the number of annotators for the category labeling and instance spotting stages to eight. We also added a stage to verify the instance segmentations.
+
+## 4.1 Category Labeling
+
+- since we have 91 categories, asking workers to answer 91 binary classification per image will be highly computationally expensive.
+- use a **hierarchical approach.**
+    - group into 11 super-categories - workers were asked if these super categories were present in the images
+    - if the super category is present, the worker will drag the icon over the object
+
+## 4.2 Instance Spotting
+
+- all instances of the object categories were labeled.
+
+## 4.3 Instance Segmentation
+
+- the interface asks the worker to segment an object instance specified by a worker in the previous stage
+
+*Segmenting 2,500,000 object instances is an extremely
+time consuming task requiring over 22 worker hours per
+1,000 segmentations.*
+
+- the process of segmentation and the problems involved in the same are described.
+
+## 4.4 Annotation Performance Analysis
+
+- crowd worker quality was analyzed by comparing precision and recall of seven expert workers with results obtained by taking the union of one to ten AMT workers.
+- Recall is a metric that measures how well a model can identify ‘true instances’ in a dataset.
+- some more stuff about workers anall
+
+## 4.5 Caption Annotation
+
+- five written captions are there for each image in MS COCO.
+
+---
+
+# 6. Dataset Splits
+
+- The cumulative 2015 release will contain a
+total of 165,482 train, 81,208 val, and 81,434 test images.
+- the chance for duplicate images has been minimized.
+
+---
+
+# 7. Algorithmic Analysis
+
+### **Bounding Box Detection :**
+
+- we obtain tight-fitting boxes for 55,000 images from the annotated segmentation masks.
+- comparison with PASCAL VOC dataset → the average performance drop by nearly a factor of 2, implying non-iconic images.
+    - we used same model but different datasets.
+    
+    *Consistent with past observations [46], we find that
+    including difficult (non-iconic) images during training
+    may not always help. Such examples may act as noise
+    and pollute the learned model if the model is not
+    rich enough to capture such appearance variability. Our
+    dataset allows for the exploration of such issues.*
+    
+- MS COCO is a difficult dataset
+- models trained on MS COCO can generalize better to easier datasets
+
+### Generating segmentations from detections :
+
+- aspect specific pixel level segmentation masks for different categories.
+- they are readily learned by averaging together segmentation masks from aligned training instances.
+
+### Detection evaluated by segmentation
+
+- segmentation is tough because it requires precise localization of object boundaries.
+- we benchmark segmentation quality using only correct detections  → (first detectors must report a correct bounding box) the standard requirement that intersection over union between predicted and ground truth boxes is at least 0.5.
+
+---
