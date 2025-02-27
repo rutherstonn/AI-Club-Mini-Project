@@ -1,3 +1,8 @@
 # AI-Club-Mini-Project
-Trial Repository 
+Trial Repository  
+
 *Convolutional Neural Networks*
+
+**hi**  
+
+:)
